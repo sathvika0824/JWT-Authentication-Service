@@ -1,24 +1,21 @@
 package spring_learn;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.crypto.SecretKey;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.crypto.SecretKey;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 public class AuthController {
 
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final SecretKey key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
 
     @GetMapping("/authenticate")
     public Map<String, String> authenticate(Principal principal) {
@@ -42,7 +39,11 @@ public class AuthController {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+        return username;
+    }
 
-        return "Token is valid. Welcome, " + username;
+    @GetMapping("/admin")
+    public String adminOnly(Principal principal) {
+        return "Hello Admin, " + principal.getName();
     }
 }
