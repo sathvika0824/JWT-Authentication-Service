@@ -1,6 +1,6 @@
-﻿# 🔐 JWT Authentication Service
+# 🔐 JWT Authentication Service
 
-A Spring Boot REST API that implements JWT-based authentication — issuing signed tokens on login and verifying them on request, demonstrating the complete authentication lifecycle.
+A Spring Boot REST API implementing complete, production-style JWT authentication — including database-backed user storage, BCrypt password hashing, and role-based access control.
 
 ## ✨ Features
 
@@ -9,52 +9,23 @@ A Spring Boot REST API that implements JWT-based authentication — issuing sign
 - ✅ Dedicated /validate endpoint to verify token authenticity
 - 🛡️ Signature-based verification to detect tampered or fake tokens
 - ⏱️ Token expiry handling (20-minute validity)
+- 🗄️ Real user persistence via MySQL and Spring Data JPA (no hardcoded credentials)
+- 🔒 Passwords hashed with BCrypt — never stored in plain text
+- 👤 Role-based access control (USER / ADMIN) restricting sensitive endpoints
 
 ## 🛠️ Tech Stack
 
-- Java
+- Java 17
 - Spring Boot 3
 - Spring Security
+- Spring Data JPA
+- MySQL
 - JJWT (io.jsonwebtoken)
 - Maven
 
 ## 📍 Endpoints
 
 ### GET /authenticate
-Authenticates a user via Basic Auth and returns a signed JWT.
+Authenticates a user via Basic Auth (checked against the database, password verified with BCrypt) and returns a signed JWT.
 
 Request:
-curl -s -u user:pwd http://localhost:8080/authenticate
-
-Response:
-{"token": "eyJhbGciOiJIUzI1NiJ9...."}
-
-### GET /validate
-Verifies a JWT's signature and returns the authenticated username.
-
-Request:
-curl "http://localhost:8080/validate?token=YOUR_TOKEN_HERE"
-
-Response:
-Token is valid. Welcome, user
-
-## 📸 Screenshots
-
-See the Screenshots folder for:
-- Successful authentication and token generation
-- Token validation response
-- Eclipse console logs confirming server startup
-
-## 🚀 How It Works
-
-1. User sends credentials to /authenticate
-2. Spring Security verifies credentials against the configured user store
-3. A JWT is generated, signed with a secret key (HS256), and returned
-4. The token can later be sent to /validate
-5. The server recalculates the signature and confirms the token's authenticity
-
-## 👩‍💻 Developer
-
-Kameswari Sathvika Bhallamudi
-- GitHub: https://github.com/sathvika0824
-- LinkedIn: https://linkedin.com/in/sathvika-aiml
